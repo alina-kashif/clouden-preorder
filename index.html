@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clouden Preorder</title>
+    <style>
+        /* Overall page styling - full height, light blue, centered */
+        body {
+            background-color: lightblue; /* Solid light blue background (no pattern for simplicity) */
+            font-family: Arial, sans-serif;
+            color: black;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Makes the page fill the full screen height */
+            display: flex; /* Uses flexbox to center and fill the page */
+            flex-direction: column; /* Stacks elements vertically */
+            justify-content: center; /* Centers vertically */
+            align-items: center; /* Centers horizontally */
+        }
+        
+        /* Brand name styling - bigger font */
+        h1 {
+            font-size: 72px; /* Much bigger for "Clouden" */
+            margin-bottom: 30px;
+        }
+        
+        /* Hoodie image styling - bigger */
+        img {
+            max-width: 250px; /* Bigger image */
+            height: auto;
+            margin-bottom: 30px;
+        }
+        
+        /* Button styling - bigger */
+        button {
+            background-color: white;
+            color: black;
+            border: 3px solid lightblue;
+            padding: 20px 40px; /* Bigger padding for a larger button */
+            font-size: 24px; /* Bigger text */
+            cursor: pointer;
+            border-radius: 15px; /* More rounded for cuteness */
+            margin-bottom: 20px;
+        }
+        
+        button:hover {
+            background-color: lightblue;
+        }
+        
+        /* Counter styling */
+        #counter {
+            font-size: 24px; /* Big enough to see */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clouden</h1> <!-- Brand name at the top -->
+    <img src="hoodie.jpg" alt="Clouden Hoodie"> <!-- Your hoodie picture - ensure it's in the same folder -->
+    <p style="font-size: 24px;">Click to place preorder</p> <!-- Bigger text above button -->
+    <div id="counter">People interested: Loading...</div> <!-- Visible counter -->
+    <button id="preorderButton">Click to Place Preorder</button> <!-- The button -->
+    
+    <script>
+        // Function to update the visible counter
+        function updateCounter() {
+            fetch('https://api.countapi.xyz/get/clouden-preorder/unique') // Fetches the current count
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('counter').textContent = 'People interested: ' + data.value; // Updates the display
+                })
+                .catch(error => {
+                    console.error('Error loading counter:', error);
+                    document.getElementById('counter').textContent = 'People interested: 0 (check connection)'; // Fallback if API fails
+                });
+        }
+        
+        // Load the counter when the page opens
+        updateCounter();
+        
+        // JavaScript for button behavior
+        const button = document.getElementById('preorderButton');
+        
+        button.addEventListener('click', function() {
+            // Check if user already clicked
+            if (localStorage.getItem('hasClicked') === 'true') {
+                alert('You have already placed a preorder!');
+                return;
+            }
+            
+            // Increment the counter
+            fetch('https://api.countapi.xyz/hit/clouden-preorder/unique')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Total interested: ' + data.value);
+                    updateCounter(); // Refresh the visible counter after click
+                })
+                .catch(error => console.error('Error:', error));
+            
+            // Mark as clicked
+            localStorage.setItem('hasClicked', 'true');
+            
+            // Redirect to thank you page
+            window.location.href = 'thank.html';
+        });
+    </script>
+</body>
+</html>
