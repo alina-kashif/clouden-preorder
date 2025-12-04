@@ -48,38 +48,15 @@
         button:hover {
             background-color: lightblue;
         }
-        
-        /* Counter styling */
-        #counter {
-            font-size: 24px; /* Big enough to see */
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
     <h1>Clouden</h1> <!-- Brand name at the top -->
     <img src="hoodie.jpg" alt="Clouden Hoodie"> <!-- Your hoodie picture - ensure it's in the same folder -->
     <p style="font-size: 24px;">Click to place preorder</p> <!-- Bigger text above button -->
-    <div id="counter">People interested: Loading...</div> <!-- Visible counter -->
     <button id="preorderButton">Click to Place Preorder</button> <!-- The button -->
     
     <script>
-        // Function to update the visible counter
-        function updateCounter() {
-            fetch('https://api.countapi.xyz/get/clouden-preorder/unique') // Fetches the current count
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('counter').textContent = 'People interested: ' + data.value; // Updates the display
-                })
-                .catch(error => {
-                    console.error('Error loading counter:', error);
-                    document.getElementById('counter').textContent = 'People interested: 0 (check connection)'; // Fallback if API fails
-                });
-        }
-        
-        // Load the counter when the page opens
-        updateCounter();
-        
         // JavaScript for button behavior
         const button = document.getElementById('preorderButton');
         
@@ -90,15 +67,6 @@
                 return;
             }
             
-            // Increment the counter
-            fetch('https://api.countapi.xyz/hit/clouden-preorder/unique')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Total interested: ' + data.value);
-                    updateCounter(); // Refresh the visible counter after click
-                })
-                .catch(error => console.error('Error:', error));
-            
             // Mark as clicked
             localStorage.setItem('hasClicked', 'true');
             
@@ -106,5 +74,23 @@
             window.location.href = 'thank.html';
         });
     </script>
+    
+    <!-- Default Statcounter code for Clouden Preorder
+    https://alina-kashif.github.io/clouden-preorder/ -->
+    <script type="text/javascript">
+    var sc_project=13188172; 
+    var sc_invisible=0; 
+    var sc_security="a323d8f7"; 
+    var scJsHost = "https://";
+    document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+
+    "statcounter.com/counter/counter.js'></"+"script>");
+    </script>
+    <noscript><div class="statcounter"><a title="Web Analytics"
+    href="https://statcounter.com/" target="_blank"><img class="statcounter"
+    src="https://c.statcounter.com/13188172/0/a323d8f7/0/" alt="Web Analytics"
+    referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+    <!-- End of Statcounter Code -->
+    <a href="https://statcounter.com/p13188172/?guest=1">View Number of Interested
+    People</a>
 </body>
 </html>
